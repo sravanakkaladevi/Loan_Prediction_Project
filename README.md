@@ -21,7 +21,7 @@ This project uses Machine Learning to predict loan approvals based on applicant 
 
 ## Installation
 
-1. **Clone this repository:**
-   ```bash
-   git clone https://github.com/sravanakkaladevi/loan-prediction.git
-   cd loan-prediction
+git clone https://github.com/sravanakkaladevi/Loan_Prediction_Project.git
+cd Loan_Prediction_Project
+
+
