@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -12,7 +14,7 @@ df = pd.read_csv("loan_data.csv")
 numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns
 df[numerical_cols] = df[numerical_cols].fillna(df[numerical_cols].median())
 
-# Fill missing values for categorical columns using the mode (most frequent value)
+# Fill missing values for categorical columns using the mode
 categorical_cols = df.select_dtypes(include=['object']).columns
 for col in categorical_cols:
     df[col] = df[col].fillna(df[col].mode()[0])
@@ -44,3 +46,31 @@ predictions = model.predict(X_test_scaled)
 # Evaluation
 accuracy = accuracy_score(y_test, predictions)
 print("Accuracy:", round(accuracy * 100, 2), "%")
+
+# Visualization - Adjust sizes
+fig, axs = plt.subplots(2, 2, figsize=(18, 10))  # Wider figure
+
+# 1. Loan Status Distribution
+sns.countplot(x="Loan_Status", data=df, ax=axs[0,0])
+axs[0,0].set_title("Loan Status Distribution")
+
+# 2. Applicant Income Distribution
+sns.histplot(df["ApplicantIncome"], bins=30, kde=True, ax=axs[0,1])
+axs[0,1].set_title("Applicant Income Distribution")
+
+# 3. Correlation Heatmap (give more space, small font)
+sns.heatmap(df.corr(), annot=True, cmap="coolwarm", fmt=".2f", ax=axs[1,0],
+            cbar=True, square=False, annot_kws={"size":6})
+axs[1,0].set_title("Feature Correlation Heatmap", fontsize=12)
+axs[1,0].set_xticklabels(axs[1,0].get_xticklabels(), rotation=45, ha='right', fontsize=7)
+axs[1,0].set_yticklabels(axs[1,0].get_yticklabels(), rotation=0, fontsize=7)
+
+# 4. Actual vs Predicted
+axs[1,1].scatter(y_test, predictions, alpha=0.6)
+axs[1,1].set_xlabel("Actual Loan Status")
+axs[1,1].set_ylabel("Predicted Loan Status")
+axs[1,1].set_title("Actual vs Predicted")
+
+plt.tight_layout()
+plt.show()
+# Visualization - Adjust sizes
